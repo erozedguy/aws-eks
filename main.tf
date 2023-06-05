@@ -43,39 +43,40 @@ resource "aws_eks_cluster" "eks_cluster" {
 }
 
 # # NODE GROUP
-# resource "aws_eks_node_group" "node_ec2" {
-#   for_each        = { for node_group in var.node_groups : node_group.name => node_group }
-#   cluster_name    = aws_eks_cluster.eks-cluster.name
-#   node_group_name = each.value.name
-#   node_role_arn   = aws_iam_role.NodeGroupRole.arn
-#   subnet_ids      = flatten(module.aws_vpc.private_subnets_id)
+resource "aws_eks_node_group" "node_ec2" {
+  for_each        = { for node_group in var.node_groups : node_group.name => node_group }
+  cluster_name    = aws_eks_cluster.eks_cluster.name
+  node_group_name = each.value.name
+  node_role_arn   = aws_iam_role.NodeGroupRole.arn
+  subnet_ids      = var.subnets_id.private_subnets_id
+  version         = each.value.k8s_version
 
-#   scaling_config {
-#     desired_size = try(each.value.scaling_config.desired_size, 2)
-#     max_size     = try(each.value.scaling_config.max_size, 3)
-#     min_size     = try(each.value.scaling_config.min_size, 1)
-#   }
+  scaling_config {
+    desired_size = try(each.value.scaling_config.desired_size, 2)
+    max_size     = try(each.value.scaling_config.max_size, 3)
+    min_size     = try(each.value.scaling_config.min_size, 1)
+  }
 
-#   update_config {
-#     max_unavailable = try(each.value.update_config.max_unavailable, 1)
-#   }
+  update_config {
+    max_unavailable = try(each.value.update_config.max_unavailable, 1)
+  }
 
-#   ami_type       = each.value.ami_type
-#   instance_types = each.value.instance_types
-#   capacity_type  = each.value.capacity_type
-#   disk_size      = each.value.disk_size
+  ami_type       = each.value.ami_type
+  instance_types = each.value.instance_types
+  capacity_type  = each.value.capacity_type
+  disk_size      = each.value.disk_size
 
-#   depends_on = [
-#     aws_iam_role_policy_attachment.AmazonEKSWorkerNodePolicy,
-#     aws_iam_role_policy_attachment.AmazonEC2ContainerRegistryReadOnly,
-#     aws_iam_role_policy_attachment.AmazonEKS_CNI_Policy
-#   ]
-# }
+  depends_on = [
+    aws_iam_role_policy_attachment.AmazonEKSWorkerNodePolicy,
+    aws_iam_role_policy_attachment.AmazonEC2ContainerRegistryReadOnly,
+    aws_iam_role_policy_attachment.AmazonEKS_CNI_Policy
+  ]
+}
 
-# # Add-ons
+# Add-ons
 # resource "aws_eks_addon" "addons" {
 #   for_each          = { for addon in var.addons : addon.name => addon }
-#   cluster_name      = aws_eks_cluster.eks-cluster.id
+#   cluster_name      = aws_eks_cluster.eks_cluster.id
 #   addon_name        = each.value.name
 #   addon_version     = each.value.version
 #   resolve_conflicts = "OVERWRITE"

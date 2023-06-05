@@ -82,6 +82,7 @@ variable "cluster_networking" {
 variable "node_groups" {
   type = list(object({
     name           = string
+    k8s_version    = string 
     instance_types = list(string)
     ami_type       = string
     capacity_type  = string
@@ -97,23 +98,9 @@ variable "node_groups" {
   }))
   default = [
     {
-      name           = "t3-micro-standard"
-      instance_types = ["t3.micro"]
-      ami_type       = "AL2_x86_64"
-      capacity_type  = "ON_DEMAND"
-      disk_size      = 20
-      scaling_config = {
-        desired_size = 2
-        max_size     = 3
-        min_size     = 1
-      }
-      update_config = {
-        max_unavailable = 1
-      }
-    },
-    {
-      name           = "t3-micro-spot"
-      instance_types = ["t3.micro"]
+      name           = "t3-large-spot"
+      k8s_version    = "1.27"
+      instance_types = ["t3.large"]
       ami_type       = "AL2_x86_64"
       capacity_type  = "SPOT"
       disk_size      = 20
