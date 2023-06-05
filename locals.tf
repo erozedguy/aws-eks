@@ -12,7 +12,7 @@
 
 # Encryptation
 locals {
-    cluster_encryption_enable = var.cluster_encryption.enable
-    cluster_encryption_enable_key_arn = var.cluster_encryption.key_arn
-    cluster_encryption_config = var.cluster_encryption.resources
+  cluster_encryption_enable         = var.cluster_encryption.enable
+  cluster_encryption_enable_key_arn = var.cluster_encryption.key_arn
+  cluster_encryption_config         = var.cluster_encryption.resources
 }

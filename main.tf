@@ -74,13 +74,14 @@ resource "aws_eks_node_group" "node_ec2" {
 }
 
 # Add-ons
-# resource "aws_eks_addon" "addons" {
-#   for_each          = { for addon in var.addons : addon.name => addon }
-#   cluster_name      = aws_eks_cluster.eks_cluster.id
-#   addon_name        = each.value.name
-#   addon_version     = each.value.version
-#   resolve_conflicts = "OVERWRITE"
-# }
+resource "aws_eks_addon" "addons" {
+  for_each                    = { for addon in var.addons : addon.name => addon }
+  cluster_name                = aws_eks_cluster.eks_cluster.id
+  addon_name                  = each.value.name
+  addon_version               = each.value.version
+  resolve_conflicts_on_create = "OVERWRITE"
+  resolve_conflicts_on_update = "OVERWRITE"
+}
 
 # resource "aws_iam_openid_connect_provider" "default" {
 #   url             = "https://${local.oidc}"

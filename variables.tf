@@ -60,8 +60,8 @@ variable "cluster_encryption" {
     resources = list(string)
   })
   default = {
-    enable   = false
-    key_arn  = ""
+    enable    = false
+    key_arn   = ""
     resources = []
   }
 }
@@ -82,7 +82,7 @@ variable "cluster_networking" {
 variable "node_groups" {
   type = list(object({
     name           = string
-    k8s_version    = string 
+    k8s_version    = string
     instance_types = list(string)
     ami_type       = string
     capacity_type  = string
@@ -125,19 +125,19 @@ variable "addons" {
   default = [
     {
       name    = "kube-proxy"
-      version = "v1.22.6-eksbuild.1"
+      version = ""
     },
     {
       name    = "vpc-cni"
-      version = "v1.11.0-eksbuild.1"
+      version = ""
     },
     {
       name    = "coredns"
-      version = "v1.8.7-eksbuild.1"
+      version = ""
     },
     {
       name    = "aws-ebs-csi-driver"
-      version = "v1.6.2-eksbuild.0"
+      version = ""
     }
   ]
 }
